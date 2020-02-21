@@ -1,16 +1,16 @@
-package com.xiangjw.androidtrainapp.ui.dashboard;
+package com.xiangjw.androidtrainapp.ui.first;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class DashboardViewModel extends ViewModel {
+public class FirstViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public DashboardViewModel() {
+    public FirstViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is dashboard fragment");
+        mText.setValue("This is first fragment");
     }
 
     public LiveData<String> getText() {
