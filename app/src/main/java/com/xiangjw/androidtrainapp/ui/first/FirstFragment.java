@@ -45,7 +45,6 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
 
     @Override
     public void showData(String info) {
-        DebugLog.i(FirstFragment.class , "showData:" + info);
         binding.textFirst.setText(info);
     }
 
