@@ -19,32 +19,43 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiangjw.androidtrainapp.R;
+import com.xiangjw.androidtrainapp.ui.first.base.BaseFragment;
+import com.xiangjw.androidtrainapp.utils.DebugLog;
 
-public class FirstFragment extends Fragment {
+public class FirstFragment extends BaseFragment<FirstPresenter> implements FirstContact.View{
 
-    private FirstViewModel firstViewModel;
     private SearchView searchView;
     private String searchStr;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        firstViewModel =
-                ViewModelProviders.of(this).get(FirstViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_first, container, false);
-        final TextView textView = root.findViewById(R.id.text_first);
-        firstViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+    private RecyclerView list;
+    private TextView textView;
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_first;
+    }
+
+    @Override
+    protected void initView() {
+        textView = rootView.findViewById(R.id.text_first);
         searchStr = "";
         setHasOptionsMenu(true);
 
-        return root;
+        presenter.loadData();
+    }
+
+    @Override
+    protected FirstPresenter createPresenter() {
+        return new FirstPresenter();
+    }
+
+    @Override
+    public void showData(String info) {
+        DebugLog.i(FirstFragment.class , "showData:" + info);
+        textView.setText(info);
     }
 
     @Override
