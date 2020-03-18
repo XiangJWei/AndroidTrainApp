@@ -9,15 +9,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewbinding.ViewBinding;
 
-public abstract class BaseFragment<T extends BasePresenter> extends Fragment implements IBaseView{
+public abstract class BaseFragment<T extends BasePresenter , B extends ViewBinding> extends Fragment implements IBaseView{
     protected View rootView;
     protected T presenter;
+    protected B binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        rootView = inflater.inflate(getLayoutId() , container , false);
+        binding = getViewBinding(inflater);
+        rootView = binding.getRoot();
 
         presenter = createPresenter();
         presenter.attachView(this);
@@ -40,7 +43,7 @@ public abstract class BaseFragment<T extends BasePresenter> extends Fragment imp
         return getContext();
     }
 
-    protected abstract int getLayoutId();
+    protected abstract B getViewBinding(LayoutInflater inflater);
 
     protected abstract void initView();
 

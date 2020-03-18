@@ -7,6 +7,7 @@ import com.xiangjw.androidtrainapp.ui.first.base.IBaseView;
  * 接口管理类,契约类
  */
 public class FirstContact {
+
     interface Presenter{
         void loadData();
     }

@@ -8,10 +8,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 public abstract class BasePresenter <M extends IBaseModel , V extends IBaseView>{
-    private M model;
-    private V view;
+    private M model;//model对象
+    private V view;//经过动态代理绑定的对象，调用其方法时就会进入handler里，可进行拦截
 
-    private WeakReference<V> reference;
+    private WeakReference<V> reference;//原本尊view的弱引用，为了不影响本尊被回收。
 
     protected void attachView(V view){
         reference = new WeakReference<>(view);

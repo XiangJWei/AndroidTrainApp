@@ -1,46 +1,37 @@
 package com.xiangjw.androidtrainapp.ui.first;
 
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.view.MenuItemCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiangjw.androidtrainapp.R;
+import com.xiangjw.androidtrainapp.databinding.FragmentFirstBinding;
 import com.xiangjw.androidtrainapp.ui.first.base.BaseFragment;
 import com.xiangjw.androidtrainapp.utils.DebugLog;
 
-public class FirstFragment extends BaseFragment<FirstPresenter> implements FirstContact.View{
+public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBinding> implements FirstContact.View{
 
     private SearchView searchView;
     private String searchStr;
 
     private RecyclerView list;
-    private TextView textView;
+
 
     @Override
-    protected int getLayoutId() {
-        return R.layout.fragment_first;
+    protected FragmentFirstBinding getViewBinding(LayoutInflater inflater) {
+        return FragmentFirstBinding.inflate(inflater);
     }
 
     @Override
     protected void initView() {
-        textView = rootView.findViewById(R.id.text_first);
         searchStr = "";
         setHasOptionsMenu(true);
 
@@ -55,7 +46,7 @@ public class FirstFragment extends BaseFragment<FirstPresenter> implements First
     @Override
     public void showData(String info) {
         DebugLog.i(FirstFragment.class , "showData:" + info);
-        textView.setText(info);
+        binding.textFirst.setText(info);
     }
 
     @Override
