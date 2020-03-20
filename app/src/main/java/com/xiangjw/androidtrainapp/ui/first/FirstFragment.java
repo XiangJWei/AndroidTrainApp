@@ -5,25 +5,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiangjw.androidtrainapp.R;
+import com.xiangjw.androidtrainapp.adapter.first.FirstKnowledgeAdapter;
+import com.xiangjw.androidtrainapp.bean.first.FirstKnowledge;
 import com.xiangjw.androidtrainapp.databinding.FragmentFirstBinding;
 import com.xiangjw.androidtrainapp.ui.first.base.BaseFragment;
 import com.xiangjw.androidtrainapp.utils.DebugLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBinding> implements FirstContact.View{
 
     private SearchView searchView;
     private String searchStr;
 
-    private RecyclerView list;
-
+    private FirstKnowledgeAdapter adapter;
 
     @Override
     protected FragmentFirstBinding getViewBinding(LayoutInflater inflater) {
@@ -35,17 +39,37 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
         searchStr = "";
         setHasOptionsMenu(true);
 
-        presenter.loadData();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.list.setLayoutManager(layoutManager);
+
+        presenter.refreshData(searchStr);
+    }
+
+    @Override
+    public void refreshDataOk(List<FirstKnowledge> data) {
+        adapter = new FirstKnowledgeAdapter(data);
+        binding.list.setAdapter(adapter);
+    }
+
+    @Override
+    public void loadMoreDataOk(List<FirstKnowledge> data) {
+        adapter = new FirstKnowledgeAdapter(data);
+        binding.list.setAdapter(adapter);
+    }
+
+    @Override
+    public void refreshDataFail(String msg) {
+
+    }
+
+    @Override
+    public void loadMoreDataFail(String msg) {
+
     }
 
     @Override
     protected FirstPresenter createPresenter() {
         return new FirstPresenter();
-    }
-
-    @Override
-    public void showData(String info) {
-        binding.textFirst.setText(info);
     }
 
     @Override
@@ -90,10 +114,11 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
     }
 
     public void doSearch(){
-        Toast.makeText(getContext() , searchStr , Toast.LENGTH_SHORT).show();
+        presenter.refreshData(searchStr);
     }
 
     public void clearSearch(){
-        Toast.makeText(getContext() , "搜索取消" , Toast.LENGTH_SHORT).show();
+        DebugLog.i(FirstFragment.class , "搜索取消");
     }
+
 }

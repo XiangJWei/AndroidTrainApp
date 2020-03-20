@@ -5,4 +5,7 @@
     <color name="colorNavBottomSel">#1c4776</color>
     <color name="colorNavBottomNom">#333333</color>
     <color name="colorNavBottomBg">#f4f4f4</color>
+
+    <color name="colorMainText">#333333</color>
+    <color name="colorMainSubText">#7B7B7B</color>
 </resources>

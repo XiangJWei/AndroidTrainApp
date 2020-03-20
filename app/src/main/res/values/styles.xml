@@ -16,4 +16,13 @@
         <item name="android:textColor">@color/colorTitleText</item>
     </style>
 
+    <style name="TextMain">
+        <item name="android:textColor">@color/colorMainText</item>
+        <item name="android:textSize">@dimen/text_main</item>
+    </style>
+
+    <style name="TextMainSub">
+        <item name="android:textColor">@color/colorMainSubText</item>
+        <item name="android:textSize">@dimen/text_main_sub</item>
+    </style>
 </resources>

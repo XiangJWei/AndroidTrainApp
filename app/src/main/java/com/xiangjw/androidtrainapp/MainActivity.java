@@ -1,8 +1,10 @@
 package com.xiangjw.androidtrainapp;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.xiangjw.androidtrainapp.databinding.ActivityMainBinding;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -15,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        ActivityMainBinding binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
+        setContentView(binding.getRoot());
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+        NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
 }
