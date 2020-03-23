@@ -36,6 +36,7 @@ public class FirstModel implements FirstContact.Model{
             @Override
             public void run() {
                 try {
+                    Thread.sleep(1000);
                     List<FirstKnowledge> data = getData();
                     List<FirstKnowledge> pageData = new ArrayList<>();
                     for(int i = 0 , okNum = 0 ; i < data.size() ; i ++){
@@ -44,9 +45,9 @@ public class FirstModel implements FirstContact.Model{
                         }
                         boolean isOk = false;
                         if(StringUtils.isNotEmpty(keyword)){
-                            if(keyword.equals(data.get(i).getName())
-                                || keyword.equals(data.get(i).getType())
-                                || keyword.equals(data.get(i).getSubject())){
+                            if(data.get(i).getName().toLowerCase().contains(keyword.toLowerCase())
+                                || data.get(i).getType().toLowerCase().contains(keyword.toLowerCase())
+                                || data.get(i).getSubject().toLowerCase().contains(keyword.toLowerCase())){
                                 isOk = true;
                             }
                         }else{

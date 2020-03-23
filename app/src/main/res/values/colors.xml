@@ -8,4 +8,5 @@
 
     <color name="colorMainText">#333333</color>
     <color name="colorMainSubText">#7B7B7B</color>
+    <color name="colorSp">#d0d0d0</color>
 </resources>

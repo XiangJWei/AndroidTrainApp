@@ -26,6 +26,8 @@ public class FirstContact {
         void loadMoreDataOk(List<FirstKnowledge> data);
         void refreshDataFail(String msg);
         void loadMoreDataFail(String msg);
+        void loadMoreDataDone(List<FirstKnowledge> data);
+        void loadNoData();
     }
 
     interface ModelLoadListener{

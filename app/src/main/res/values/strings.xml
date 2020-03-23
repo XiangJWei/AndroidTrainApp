@@ -3,4 +3,9 @@
     <string name="title_first">基础</string>
     <string name="title_second">进阶</string>
     <string name="title_third">专家</string>
+
+
+    <string name="load_more_complete">点击加载下一页</string>
+    <string name="load_restart">点击重新加载</string>
+    <string name="load_more_nodata">我是有底线的</string>
 </resources>

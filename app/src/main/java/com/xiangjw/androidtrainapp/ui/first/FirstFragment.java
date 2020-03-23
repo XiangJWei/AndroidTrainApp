@@ -1,33 +1,36 @@
 package com.xiangjw.androidtrainapp.ui.first;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.xiangjw.androidtrainapp.R;
+import com.xiangjw.androidtrainapp.adapter.base.LoadMoreAdapter;
+import com.xiangjw.androidtrainapp.adapter.base.LoadMoreScrollListener;
 import com.xiangjw.androidtrainapp.adapter.first.FirstKnowledgeAdapter;
 import com.xiangjw.androidtrainapp.bean.first.FirstKnowledge;
 import com.xiangjw.androidtrainapp.databinding.FragmentFirstBinding;
 import com.xiangjw.androidtrainapp.ui.first.base.BaseFragment;
+import com.xiangjw.androidtrainapp.uiutils.ConvertUtils;
+import com.xiangjw.androidtrainapp.uiutils.CustomListDivider;
 import com.xiangjw.androidtrainapp.utils.DebugLog;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBinding> implements FirstContact.View{
+public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBinding> implements FirstContact.View , FirstKnowledgeAdapter.ListClickListener{
 
     private SearchView searchView;
     private String searchStr;
 
-    private FirstKnowledgeAdapter adapter;
+    FirstKnowledgeAdapter firstKnowledgeAdapter;
+    private LoadMoreAdapter adapter;
 
     @Override
     protected FragmentFirstBinding getViewBinding(LayoutInflater inflater) {
@@ -41,30 +44,85 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.list.setLayoutManager(layoutManager);
+        binding.list.addItemDecoration(new CustomListDivider(1
+                , ConvertUtils.dp2px(getContext() , 10)
+                , ConvertUtils.dp2px(getContext() , 10) , getResources().getColor(R.color.colorSp) , false));
 
+        firstKnowledgeAdapter = new FirstKnowledgeAdapter(null , this);
+        adapter = new LoadMoreAdapter(firstKnowledgeAdapter , this);
+        binding.list.setAdapter(adapter);
+        binding.list.addOnScrollListener(new LoadMoreScrollListener() {
+            @Override
+            public void scrollLoadMore() {
+                if(adapter.canScroll()) {
+                    adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.LOADING);
+                    presenter.loadMoreData(searchStr);
+                }
+            }
+        });
+
+        startLoad();
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding.list.clearOnScrollListeners();
+        super.onDestroyView();
+    }
+
+    public void startLoad(){
+        firstKnowledgeAdapter.setList(null);
+        adapter.notifyDataSetChanged();
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.FIRST_LOADING);
         presenter.refreshData(searchStr);
     }
 
     @Override
     public void refreshDataOk(List<FirstKnowledge> data) {
-        adapter = new FirstKnowledgeAdapter(data);
-        binding.list.setAdapter(adapter);
+        firstKnowledgeAdapter.setList(data);
+        adapter.notifyDataSetChanged();
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
     }
 
     @Override
     public void loadMoreDataOk(List<FirstKnowledge> data) {
-        adapter = new FirstKnowledgeAdapter(data);
-        binding.list.setAdapter(adapter);
+        firstKnowledgeAdapter.setList(data);
+        adapter.notifyDataSetChanged();
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
     }
 
     @Override
     public void refreshDataFail(String msg) {
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
+    }
 
+    @Override
+    public void loadNoData() {
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.NO_DATA);
+    }
+
+    @Override
+    public void loadMoreDataDone(List<FirstKnowledge> data) {
+        firstKnowledgeAdapter.setList(data);
+        adapter.notifyDataSetChanged();
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.NO_DATA);
     }
 
     @Override
     public void loadMoreDataFail(String msg) {
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
+    }
 
+    @Override
+    public void onClickItem(FirstKnowledge item) {
+        DebugLog.i(FirstFragment.class , "列表点击：" + item.getName());
+    }
+
+    @Override
+    public void onClickLoadMore() {
+        DebugLog.i(FirstFragment.class , "列表点击更多");
+        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.LOADING);
+        presenter.loadMoreData(searchStr);
     }
 
     @Override
@@ -98,7 +156,7 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
             public boolean onQueryTextSubmit(String query) {
                 searchView.clearFocus();
                 searchStr = query;
-                doSearch();
+                startLoad();
                 return false;
             }
 
@@ -106,19 +164,10 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
             public boolean onQueryTextChange(String newText) {
                 if("".equals(newText) && !"".equals(searchStr)){
                     searchStr = "";
-                    clearSearch();
+                    startLoad();
                 }
                 return false;
             }
         });
     }
-
-    public void doSearch(){
-        presenter.refreshData(searchStr);
-    }
-
-    public void clearSearch(){
-        DebugLog.i(FirstFragment.class , "搜索取消");
-    }
-
 }
