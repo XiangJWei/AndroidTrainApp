@@ -54,14 +54,24 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
         binding.list.addOnScrollListener(new LoadMoreScrollListener() {
             @Override
             public void scrollLoadMore() {
-                if(adapter.canScroll()) {
-                    adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.LOADING);
+                if(adapter.canLoadMore()) {
+                    notifyLoadMore(LoadMoreAdapter.LoadMoreState.LOADING);
                     presenter.loadMoreData(searchStr);
                 }
             }
         });
 
         startLoad();
+    }
+
+    private void notifyLoadMore(LoadMoreAdapter.LoadMoreState state){
+        adapter.setLoadMoreState(state);
+        binding.list.post(new Runnable() {//如果不这样，滚动下一页刷新时会报错
+            @Override
+            public void run() {
+                adapter.notifyItemChanged(adapter.getItemCount() - 1);
+            }
+        });
     }
 
     @Override
@@ -73,7 +83,7 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
     public void startLoad(){
         firstKnowledgeAdapter.setList(null);
         adapter.notifyDataSetChanged();
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.FIRST_LOADING);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.FIRST_LOADING);
         presenter.refreshData(searchStr);
     }
 
@@ -81,36 +91,36 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
     public void refreshDataOk(List<FirstKnowledge> data) {
         firstKnowledgeAdapter.setList(data);
         adapter.notifyDataSetChanged();
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.COMPLETE);
     }
 
     @Override
     public void loadMoreDataOk(List<FirstKnowledge> data) {
         firstKnowledgeAdapter.setList(data);
         adapter.notifyDataSetChanged();
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.COMPLETE);
     }
 
     @Override
     public void refreshDataFail(String msg) {
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.COMPLETE);
     }
 
     @Override
     public void loadNoData() {
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.NO_DATA);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.NO_DATA);
     }
 
     @Override
     public void loadMoreDataDone(List<FirstKnowledge> data) {
         firstKnowledgeAdapter.setList(data);
         adapter.notifyDataSetChanged();
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.NO_DATA);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.NO_DATA);
     }
 
     @Override
     public void loadMoreDataFail(String msg) {
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.COMPLETE);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.COMPLETE);
     }
 
     @Override
@@ -121,7 +131,7 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
     @Override
     public void onClickLoadMore() {
         DebugLog.i(FirstFragment.class , "列表点击更多");
-        adapter.setLoadMoreState(LoadMoreAdapter.LoadMoreState.LOADING);
+        notifyLoadMore(LoadMoreAdapter.LoadMoreState.LOADING);
         presenter.loadMoreData(searchStr);
     }
 

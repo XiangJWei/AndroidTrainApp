@@ -11,6 +11,7 @@ import com.xiangjw.androidtrainapp.network.NetResult;
 import com.xiangjw.androidtrainapp.utils.DebugLog;
 import com.xiangjw.androidtrainapp.utils.StringUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,16 +20,15 @@ public class FirstModel implements FirstContact.Model{
     private static final int MSG_LOAD = 1;
 
     FirstContact.ModelLoadListener listener;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            switch (msg.what){
-                case MSG_LOAD:
-                    listener.loadDone((NetResult)msg.obj);
-                    break;
-            }
+    private MyHandler handler = new MyHandler(this);
+
+    private void handleMessage(@NonNull Message msg) {
+        switch (msg.what){
+            case MSG_LOAD:
+                listener.loadDone((NetResult)msg.obj);
+                break;
         }
-    };
+    }
     @Override
     public void requestData(int page , int pageNum , final String keyword , FirstContact.ModelLoadListener listener){
         this.listener = listener;
@@ -118,5 +118,24 @@ public class FirstModel implements FirstContact.Model{
         data.add(new FirstKnowledge("SharedPreference" ,"持久化" , "" , ""));
         data.add(new FirstKnowledge("单元测试" ,"测试" , "" , ""));
         return data;
+    }
+
+    /**
+     * 定义静态内部类+弱引用。避免handler持有外部对象。导致内存泄露
+     */
+    private static class MyHandler extends Handler{
+        private WeakReference<FirstModel> model;
+
+        public MyHandler(FirstModel model) {
+            this.model = new WeakReference<>(model);
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            FirstModel first = model.get();
+            if(first != null){
+                first.handleMessage(msg);
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.xiangjw.androidtrainapp.R;
 import com.xiangjw.androidtrainapp.databinding.BaseListLoadMoreBinding;
@@ -40,10 +41,9 @@ public class LoadMoreAdapter extends RecyclerView.Adapter<BaseViewHolder<BaseLis
 
     public void setLoadMoreState(LoadMoreState state){
         this.state = state;
-        notifyDataSetChanged();
     }
 
-    public boolean canScroll(){
+    public boolean canLoadMore(){
         return state == LoadMoreState.COMPLETE;
     }
 

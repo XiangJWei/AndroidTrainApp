@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        
+        <variable
+            name="data"
+            type="com.xiangjw.androidtrainapp.bean.second.SecondKnowledge" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@android:color/white">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@{data.img}"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextMain"
+            app:layout_constraintTop_toBottomOf="@id/img"
+            app:layout_constraintBottom_toTopOf="@id/subtitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/type"
+            android:text="@{data.name}"
+            tools:text="标题" />
+
+        <TextView
+            android:id="@+id/type"
+            style="@style/TextMainSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#2894FF"
+            app:layout_constraintTop_toBottomOf="@id/img"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{data.type}"
+            tools:text="类型" />
+
+        <TextView
+            android:id="@+id/subtitle"
+            style="@style/TextMainSub"
+            android:layout_marginTop="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            android:text="@{data.subject}"
+            android:visibility="@{data.showSubJect() ? View.VISIBLE : View.GONE }"
+            tools:text="副标题" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
