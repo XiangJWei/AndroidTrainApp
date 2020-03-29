@@ -56,7 +56,6 @@ public abstract class BasePresenter <M extends IBaseModel , V extends IBaseView>
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            DebugLog.i(BasePresenter.class , "调用：" + handlerView.getClass().getSimpleName() + "->" + method.getName());
             //本尊调用方法时触发
             if(isViewAttached()){
                 //弱引用里的本尊没有被回收，才会调用

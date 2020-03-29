@@ -17,6 +17,7 @@ import com.xiangjw.androidtrainapp.adapter.base.LoadMoreScrollListener;
 import com.xiangjw.androidtrainapp.adapter.first.FirstKnowledgeAdapter;
 import com.xiangjw.androidtrainapp.bean.first.FirstKnowledge;
 import com.xiangjw.androidtrainapp.databinding.FragmentFirstBinding;
+import com.xiangjw.androidtrainapp.ui.first.activities.A1ActiActivity;
 import com.xiangjw.androidtrainapp.ui.first.base.BaseFragment;
 import com.xiangjw.androidtrainapp.uiutils.ConvertUtils;
 import com.xiangjw.androidtrainapp.uiutils.CustomListDivider;
@@ -126,6 +127,11 @@ public class FirstFragment extends BaseFragment<FirstPresenter , FragmentFirstBi
     @Override
     public void onClickItem(FirstKnowledge item) {
         DebugLog.i(FirstFragment.class , "列表点击：" + item.getName());
+        switch (item.getName()){
+            case "Activity":
+                openActivity(A1ActiActivity.class);
+                break;
+        }
     }
 
     @Override

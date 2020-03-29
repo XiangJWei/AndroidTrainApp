@@ -1,6 +1,7 @@
 package com.xiangjw.androidtrainapp.ui.first.base;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,4 +49,16 @@ public abstract class BaseFragment<T extends BasePresenter , B extends ViewBindi
     protected abstract void initView();
 
     protected abstract T createPresenter();
+
+    protected void openActivity(Class target){
+        Intent intent = new Intent();
+        intent.setClass(getBaseContext() , target);
+        startActivity(intent);
+    }
+
+    protected void openActivity(Class target , Bundle bundle){
+        Intent intent = new Intent();
+        intent.setClass(getBaseContext() , target);
+        startActivity(intent , bundle);
+    }
 }

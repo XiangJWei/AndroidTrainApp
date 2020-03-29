@@ -8,7 +8,7 @@ import com.xiangjw.androidtrainapp.BuildConfig;
 public class DebugLog {
     public static void i(Class name , String info){
         if(BuildConfig.DEBUG){
-            Log.i("DebugLog:" + name.getCanonicalName() + '-'
+            Log.i("DebugLog:" + name.getSimpleName() + '-'
                     + Looper.getMainLooper().getThread().getId() + '-'
                     + Thread.currentThread().getId(), info);
         }

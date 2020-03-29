@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.xiangjw.androidtrainapp.databinding.ActivityMainBinding;
+import com.xiangjw.androidtrainapp.ui.base.BaseActivity;
+import com.xiangjw.androidtrainapp.uiutils.ToastUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -12,15 +14,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity<ActivityMainBinding> {
+    private long lastExitSeconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
-        setContentView(binding.getRoot());
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
+        //初始化tab
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_first, R.id.navigation_second, R.id.navigation_third)
                 .build();
@@ -29,4 +30,20 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
     }
 
+    @Override
+    protected ActivityMainBinding initBindingView(LayoutInflater inflater) {
+        return ActivityMainBinding.inflate(inflater);
+    }
+
+    @Override
+    public void onBackPressed() {
+        long now = System.currentTimeMillis();
+        if(now - lastExitSeconds < 2000){
+            finish();
+//            System.exit(0);
+        }else{
+            lastExitSeconds = now;
+            ToastUtils.show("再点击一次即退出程序");
+        }
+    }
 }
