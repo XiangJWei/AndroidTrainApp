@@ -1,17 +1,13 @@
 package com.xiangjw.androidtrainapp.ui.first.activities;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 
 
 import androidx.annotation.Nullable;
 
 import com.xiangjw.androidtrainapp.databinding.FirstA1ActiBinding;
 import com.xiangjw.androidtrainapp.ui.base.BaseActivity;
-import com.xiangjw.androidtrainapp.utils.DebugLog;
 
 public class A1ActiActivity extends BaseActivity<FirstA1ActiBinding> {
 
